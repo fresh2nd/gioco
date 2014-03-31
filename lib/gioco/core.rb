@@ -12,7 +12,7 @@ class Gioco
         old_pontuation  = resource.points.to_i
         related_badges  = Badge.where((old_pontuation < points) ? "points <= #{points}" : "points > #{points} AND points <= #{old_pontuation}")
       end
-      new_pontuation    = ( old_pontuation < points ) ? points - old_pontuation : - (old_pontuation - points)
+      new_pontuation    = points - old_pontuation
 
       { old_pontuation: old_pontuation, related_badges: related_badges, new_pontuation: new_pontuation }
     end
@@ -39,12 +39,12 @@ class Gioco
               badges[:added] << badge
             end
           elsif old_pontuation > points
-            resource.levels.where( :badge_id => badge.id ).first.mark_for_destruction
+            resource.levels.where( :badge_id => badge.id ).first.destroy
             badges[:removed] = [] if badges[:removed].nil?
             badges[:removed] << badge
           end
         end
-        resource.save
+        resource.reload unless badges[:removed].nil?
         badges
       end
     end
