@@ -39,7 +39,7 @@ class Gioco
               badges[:added] << badge
             end
           elsif old_pontuation > points
-            resource.levels.where( :badge_id => badge.id ).first.destroy
+            resource.levels.where( :badge_id => badge.id ).first.mark_for_destruction
             badges[:removed] = [] if badges[:removed].nil?
             badges[:removed] << badge
           end
