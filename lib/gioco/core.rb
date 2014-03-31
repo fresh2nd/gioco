@@ -44,6 +44,7 @@ class Gioco
             badges[:removed] << badge
           end
         end
+        resource.save
         badges
       end
     end
